@@ -8,7 +8,6 @@ import { Form } from "@/components/ui/form";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import InputForm from "@/components/form-input/input";
-import { signIn } from "@/hooks/api/login";
 import { redirect, useRouter } from "next/navigation";
 import { authenticate } from "../api/lib/action";
 
@@ -26,7 +25,6 @@ export default function LoginForm() {
   });
 
   const { control } = form;
-  const { mutate } = signIn();
 
   const onSubmit = async (values: z.infer<typeof TLoginScheme>) => {
     setIsError(false);
