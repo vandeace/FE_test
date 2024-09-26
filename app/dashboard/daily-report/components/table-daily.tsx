@@ -1,27 +1,26 @@
 "use client";
 import { DataTableX } from "@/components/datatable";
+import { useGetDailyLalin } from "@/hooks/api/use-get-daily-lalin";
 import useMutableSearchParams from "@/hooks/utils/param";
 import { PaginationState } from "@tanstack/react-table";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { columns } from "./column-header";
-import { useGetAllGate } from "@/hooks/api/use-get-master-data";
-export default function TableMaster() {
+
+export default function TableDaily({ value }: { value: string }) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 5,
   });
 
   const searchParams = useMutableSearchParams();
 
-  const [gate] = useDebounce(searchParams.get("gate"), 1000);
-  const [branch] = useDebounce(searchParams.get("branch"), 1000);
-  const { data } = useGetAllGate({
+  const [date] = useDebounce(searchParams.get("date"), 1000);
+  const { data } = useGetDailyLalin({
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
     filter: {
-      NamaCabang: branch ?? undefined,
-      NamaGerbang: gate ?? undefined,
+      tanggal: (date && date.split("-").reverse().join("-")) ?? undefined,
     },
   });
 
@@ -29,7 +28,7 @@ export default function TableMaster() {
     <div className="overflow-y-auto w-full">
       {!!data?.data.rows.rows ? (
         <DataTableX
-          columns={columns}
+          columns={columns(value)}
           data={data?.data.rows.rows}
           pagination={pagination}
           setPagination={setPagination}

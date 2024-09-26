@@ -1,9 +1,4 @@
-type TDataRow = {
-  id: number;
-  [key: string]: string | number;
-};
-
-export type TApiResponse<T extends TDataRow> = {
+export type TApiResponse<T> = {
   status: boolean;
   message: string;
   code: number;
